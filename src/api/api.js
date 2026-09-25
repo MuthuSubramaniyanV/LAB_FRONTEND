@@ -17,7 +17,8 @@ function token() {
 function normalizeError(detail, status) {
   if (Array.isArray(detail)) return detail.map(item => item.msg || 'Validation error').join(', ')
   if (typeof detail === 'string') return detail
-  return status === 401 ? 'Your session has expired. Please log in again.' : 'The server returned an unexpected error.'
+  const messages = { 401: 'Your session has expired. Please log in again.', 403: 'You do not have permission to update this template.', 404: 'Template not found.', 409: 'This template conflicts with an existing record.', 422: 'The template data failed validation.', 500: 'The server could not update the template.' }
+  return messages[status] || 'The server returned an unexpected error.'
 }
 
 export async function request(path, options = {}) {
