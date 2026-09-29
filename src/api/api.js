@@ -54,26 +54,80 @@ const query = params => {
   return result ? `?${result}` : ''
 }
 const list = payload => Array.isArray(payload) ? payload : payload?.items || payload?.data || []
-
 export const api = {
   tokenKey: TOKEN_KEY,
-  login: credentials => request('/auth/login', { method: 'POST', body: JSON.stringify(credentials) }),
+
+  login: credentials =>
+    request('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify(credentials),
+    }),
+
   dashboard: () => request('/admin/dashboard'),
+
   settings: () => request('/admin/settings'),
-  updateInactiveDays: value => request('/admin/settings/inactive-days', { method: 'PUT', body: JSON.stringify({ value: String(value) }) }),
-  customers: params => request(`/customers${query({ page: 1, page_size: 100, ...params })}`),
-  inactiveCustomers: params => request(`/customers/inactive${query({ page: 1, page_size: 100, ...params })}`),
+
+  updateInactiveDays: value =>
+    request('/admin/settings/inactive-days', {
+      method: 'PUT',
+      body: JSON.stringify({ value: String(value) }),
+    }),
+
+  customers: params =>
+    request(`/customers${query({ page: 1, page_size: 100, ...params })}`),
+
+  inactiveCustomers: params =>
+    request(`/customers/inactive${query({ page: 1, page_size: 100, ...params })}`),
+
   customer: id => request(`/customers/${id}`),
-  visits: id => request(`/customers/${id}/visits${query({ page: 1, page_size: 100 })}`),
-  campaigns: params => request(`/campaigns${query({ page: 1, page_size: 100, ...params })}`),
+
+  visits: id =>
+    request(`/customers/${id}/visits${query({ page: 1, page_size: 100 })}`),
+
+  campaigns: params =>
+    request(`/campaigns${query({ page: 1, page_size: 100, ...params })}`),
+
   campaign: id => request(`/campaigns/${id}`),
-  createCampaign: body => request('/campaigns', { method: 'POST', body: JSON.stringify(body) }),
-  populateCampaign: id => request(`/campaigns/${id}/populate`, { method: 'POST' }),
-  templates: params => request(`/templates${query({ page: 1, page_size: 100, ...params })}`),
+
+  createCampaign: body =>
+    request('/campaigns', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    }),
+
+  populateCampaign: id =>
+    request(`/campaigns/${id}/populate`, {
+      method: 'POST',
+    }),
+
+  sendCampaign: (id, templateId) =>
+    request(`/campaigns/${id}/send`, {
+      method: 'POST',
+      body: JSON.stringify({
+        template_id: templateId,
+      }),
+    }),
+
+  templates: params =>
+    request(`/templates${query({ page: 1, page_size: 100, ...params })}`),
+
   template: id => request(`/templates/${id}`),
-  createTemplate: body => request('/templates', { method: 'POST', body: JSON.stringify(body) }),
-  updateTemplate: (id, body) => request(`/templates/${id}`, { method: 'PUT', body: JSON.stringify(body) }),
-  messages: params => request(`/messages${query({ page: 1, page_size: 100, ...params })}`),
+
+  createTemplate: body =>
+    request('/templates', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    }),
+
+  updateTemplate: (id, body) =>
+    request(`/templates/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(body),
+    }),
+
+  messages: params =>
+    request(`/messages${query({ page: 1, page_size: 100, ...params })}`),
+
   message: id => request(`/messages/${id}`),
 }
 
